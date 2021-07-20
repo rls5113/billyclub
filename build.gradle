@@ -21,11 +21,14 @@ repositories {
 }
 
 sourceSets {
-	intTest {
-		compileClasspath += sourceSets.main.output
-		runtimeClasspath += sourceSets.main.output
+	integrationTest {
+		java.srcDir "$projectDir/src/integrationTest"
+		resources.srcDir "$projectDir/src/integrationTest/resources"
+		compileClasspath += main.output + test.output
+		runtimeClasspath += main.output + test.output
 	}
 }
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -48,8 +51,8 @@ tasks.register('integrationTest', Test) {
 	description = 'Runs integration tests.'
 	group = 'verification'
 
-	testClassesDirs = sourceSets.intTest.output.classesDirs
-	classpath = sourceSets.intTest.runtimeClasspath
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
 	shouldRunAfter test
 }
 
