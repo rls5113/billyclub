@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'idea'
 }
 
 group = 'com.billyclub'
@@ -12,8 +13,8 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
-	intTestImplementation.extendsFrom implementation
-	intTestRuntimeOnly.extendsFrom runtimeOnly
+	integrationTestImplementation.extendsFrom implementation
+	integrationTestRuntimeOnly.extendsFrom runtimeOnly
 }
 
 repositories {
@@ -22,7 +23,7 @@ repositories {
 
 sourceSets {
 	integrationTest {
-		java.srcDir "$projectDir/src/integrationTest"
+		java.srcDir "$projectDir/src/integrationTest/java"
 		resources.srcDir "$projectDir/src/integrationTest/resources"
 		compileClasspath += main.output + test.output
 		runtimeClasspath += main.output + test.output
@@ -40,7 +41,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mockito:mockito-junit-jupiter:2.23.4'
-	intTestImplementation 'junit:junit:4.13.1'
+	integrationTestImplementation 'junit:junit:4.13.1'
+	integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 test {
