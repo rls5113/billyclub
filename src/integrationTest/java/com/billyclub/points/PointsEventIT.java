@@ -15,7 +15,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class IntegrationTests {
+public class PointsEventIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -23,7 +23,7 @@ public class IntegrationTests {
     @Test
     public void getPointsEvents_returnsAllPointEvents() throws Exception {
 
-        ResponseEntity<PointsEvent[]> response =  restTemplate.getForEntity("/pointsEvent", PointsEvent[].class);
+        ResponseEntity<PointsEvent> response =  restTemplate.getForEntity("/pointsEvents", PointsEvent.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 //        Movie[] results = response.getBody();
