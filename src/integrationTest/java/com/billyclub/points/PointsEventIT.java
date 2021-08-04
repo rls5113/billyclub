@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
@@ -23,7 +25,7 @@ public class PointsEventIT {
     @Test
     public void getPointsEvents_returnsAllPointEvents() throws Exception {
 
-        ResponseEntity<PointsEvent> response =  restTemplate.getForEntity("/pointsEvents", PointsEvent.class);
+        ResponseEntity<PointsEvent> response =  restTemplate.getForEntity("/api/v1/pointsEvent", List<PointsEvent>.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 //        Movie[] results = response.getBody();

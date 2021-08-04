@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.time.LocalDateTime;
 
+
 public interface PointsEventRepository extends CrudRepository<PointsEvent, Long> {
     public PointsEvent findByEventDate(LocalDateTime date);
 }

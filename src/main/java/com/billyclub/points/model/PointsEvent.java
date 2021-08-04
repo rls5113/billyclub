@@ -18,7 +18,7 @@ public class PointsEvent {
     @Id
     private long id;
     private LocalDateTime eventDate;
-    private int numberOfTeeTimes;
+    private int numOfTimes;
 //    @CreatedDate
 //    private LocalDateTime createdDate;
 //    @CreatedBy

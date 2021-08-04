@@ -10,15 +10,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class PointsEventController {
 
     @Autowired
     PointsEventService pointsEventService;
 
-    @GetMapping("/pointsEvents")
-    private PointsEvent getPointsEvent() {
-        return pointsEventService.getEventDetails("date");
+    @GetMapping("/api/v1/pointsEvent")
+    private List<PointsEvent> getPointsEvent() {
+
+        return pointsEventService.getAllPointsEvents();
     }
 
     @ExceptionHandler
