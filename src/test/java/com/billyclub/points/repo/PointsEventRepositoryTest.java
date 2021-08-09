@@ -33,7 +33,7 @@ public class PointsEventRepositoryTest {
         List<PointsEvent> events = new ArrayList<>();
         for(int i=0;i<3;i++) {
             LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,i+2,0,0);
-            PointsEvent pe = new PointsEvent(i+8, ldt ,i+1);
+            PointsEvent pe = new PointsEvent( ldt ,i+1);
             events.add(pe);
             testEntityManager.persistAndFlush(pe);
 
@@ -41,6 +41,20 @@ public class PointsEventRepositoryTest {
         List<PointsEvent> result = (List<PointsEvent>) pointsEventRepository.findAll();
 
         assertThat(result.size()).isGreaterThanOrEqualTo(events.size());
+    }
+
+    @Test
+    public void addPointsEvent_createsNewAndReturns() throws Exception {
+
+            LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
+            PointsEvent pe = new PointsEvent( ldt ,6);
+//            testEntityManager.persistAndFlush(pe);
+
+
+        PointsEvent result = (PointsEvent) pointsEventRepository.save(pe);
+
+        assertThat(result.getEventDate()).isEqualTo(pe.getEventDate());
+        assertThat(result.getNumOfTimes()).isEqualTo(pe.getNumOfTimes());
     }
 
 //    @Test

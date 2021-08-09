@@ -1,6 +1,5 @@
 package com.billyclub.points.controller;
 
-import com.billyclub.points.exceptions.PointsEventNotFoundException;
 import com.billyclub.points.model.PointsEvent;
 import com.billyclub.points.service.PointsEventService;
 import org.junit.jupiter.api.Test;
@@ -13,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,24 +32,34 @@ public class PointsEventControllerTest {
     private PointsEventService pointsEventService;
 
     @Test
-    public void getEvent_shouldReturnEvent() throws Exception {
-        PointsEvent pointsEvent = new PointsEvent(1, LocalDateTime.now(),3);
-        List<PointsEvent> list = new ArrayList<>();
-        list.add(pointsEvent);
-        given(pointsEventService.getAllPointsEvents()).willReturn(list);
+    public void addNewPointsEvent_shouldCreateAndReturnEvent() throws Exception {
+        LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
+        PointsEvent pe = new PointsEvent(567l,ldt ,6);
+        given(pointsEventService.savePointsEvent(pe)).willReturn(pe);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pointsEvent"))
-                .andExpect(status().isOk());
-//                .andExpect(jsonPath("numberOfTeeTimes").value("3"));
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/pointsEvent"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.numOfTimes").value("6"))
+        ;
     }
 
-//    @Test
-//    public void getEvent_notFound() throws Exception {
-//        given(pointsEventService.getEventDetails(anyString())).willThrow(new PointsEventNotFoundException());
-//
-//        mockMvc.perform(MockMvcRequestBuilders.get("/pointsEvents"))
-//                .andExpect(status().isNotFound());
-//    }
+    @Test
+    public void getAllEvents_shouldReturnAllEvent() throws Exception {
+        List<PointsEvent> events = new ArrayList<>();
+        for(int i=0;i<3;i++) {
+            LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,i+2,0,0);
+            PointsEvent pe = new PointsEvent(i, ldt ,i+1);
+            events.add(pe);
+        }
+        given(pointsEventService.getAllPointsEvents()).willReturn(events);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pointsEvent"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].numOfTimes").value("1"))
+                .andExpect(jsonPath("$[1].numOfTimes").value("2"))
+                .andExpect(jsonPath("$[2].numOfTimes").value("3"))
+        ;
+    }
 
 
 }

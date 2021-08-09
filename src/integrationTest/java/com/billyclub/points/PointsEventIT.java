@@ -6,10 +6,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,11 +28,40 @@ public class PointsEventIT {
 
     @Test
     public void getPointsEvents_returnsAllPointEvents() throws Exception {
-
-        ResponseEntity<PointsEvent> response =  restTemplate.getForEntity("/api/v1/pointsEvent", List<PointsEvent>.class);
-
+        ResponseEntity<PointsEvent[]> response = restTemplate.getForEntity("/api/v1/pointsEvent", PointsEvent[].class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        Movie[] results = response.getBody();
-//        assertThat(results.length).isGreaterThanOrEqualTo(72);
     }
+
+    @Test
+    public void getPointsEventById_returnsCorrectRecord() throws Exception {
+        ResponseEntity<PointsEvent> response = restTemplate.getForEntity("/api/v1/pointsEvent/1000",PointsEvent.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getId()).isEqualTo(1000L);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
+    }
+
+    @Test
+    public void savePointsEvent_returnsNewRecord() throws Exception {
+        LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
+        PointsEvent pe = new PointsEvent();
+        pe.setEventDate(ldt);
+        pe.setNumOfTimes(2);
+
+        HttpEntity<PointsEvent> request = new HttpEntity<>(pe);
+        ResponseEntity<PointsEvent> response = restTemplate.postForEntity("/pointsEvent", request, PointsEvent.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+//        assertThat(response.getBody().getId()).isNotNull();
+//        assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
+
+
+    }
+//    @Test
+//    public void addPointsEvent_returnsNewEvent() throws Exception {
+//        PointsEvent pointsEvent = new PointsEvent();
+//        pointsEvent.setEventDate(LocalDateTime.of(2021, Month.APRIL,2,0,0));
+//        pointsEvent.setNumOfTimes(6);
+//        ResponseEntity<PointsEvent> response = restTemplate.postForObject("/api/v1/pointsEvent", pointsEvent, PointsEvent.class);
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//    }
+
 }

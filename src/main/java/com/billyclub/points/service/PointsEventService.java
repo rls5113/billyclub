@@ -6,9 +6,8 @@ import com.billyclub.points.repo.PointsEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PointsEventService {
@@ -33,4 +32,14 @@ public class PointsEventService {
     public List<PointsEvent> getAllPointsEvents() {
         return (List<PointsEvent>) pointsEventRepo.findAll();
     }
+    public PointsEvent savePointsEvent(PointsEvent newPointsEvent) {
+        System.out.println(newPointsEvent.toString());
+        return pointsEventRepo.save(newPointsEvent);
+    }
+
+    public PointsEvent getPointsEventById(Long id) {
+        return  pointsEventRepo.findById(id).get();
+    }
+
+
 }
