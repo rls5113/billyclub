@@ -1,10 +1,9 @@
 package com.billyclub.points.controller;
 
-import com.billyclub.points.exceptions.PointsEventNotFoundException;
+import com.billyclub.points.exceptions.ResourceNotFoundException;
 import com.billyclub.points.model.PointsEvent;
 import com.billyclub.points.service.PointsEventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +31,26 @@ public class PointsEventController {
         return new ResponseEntity<>(pointsEventService.getAllPointsEvents(), HttpStatus.OK);
     }
 
-    @PostMapping(/pointsEvent)
+    @PostMapping("/pointsEvent")
     private ResponseEntity<PointsEvent> savePointsEvent(@RequestBody PointsEvent newPointsEvent) {
         return new ResponseEntity<>(pointsEventService.savePointsEvent(newPointsEvent), HttpStatus.CREATED);
     }
+    @PutMapping("/pointsEvent/{id}")
+    private ResponseEntity<PointsEvent> updatePointsEvent(@PathVariable Long id,@RequestBody PointsEvent body) throws ResourceNotFoundException {
+        PointsEvent event = pointsEventService.getPointsEventById(id);
+        if(event == null) throw new ResourceNotFoundException("PointsEvent[ id:"+id+" ]");
+
+        event.setEventDate(body.getEventDate());
+        event.setNumOfTimes(body.getNumOfTimes());
+        final PointsEvent updatedEvent = pointsEventService.savePointsEvent(event);
+
+        return ResponseEntity.ok(updatedEvent);
+
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    private void eventNotFoundHandler(PointsEventNotFoundException ex) {
+    private void eventNotFoundHandler(ResourceNotFoundException ex) {
 
     }
 }

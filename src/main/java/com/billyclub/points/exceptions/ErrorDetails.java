@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @NoArgsConstructor
 public class ErrorDetails {
     private LocalDateTime timestamp;

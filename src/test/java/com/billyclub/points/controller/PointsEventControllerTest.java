@@ -2,11 +2,15 @@ package com.billyclub.points.controller;
 
 import com.billyclub.points.model.PointsEvent;
 import com.billyclub.points.service.PointsEventService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -17,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.ArgumentMatchers.*;
@@ -31,18 +36,48 @@ public class PointsEventControllerTest {
     @MockBean
     private PointsEventService pointsEventService;
 
+    //get by id
+    @Test
+    public void getById_shouldReturnOneEvent() throws Exception {
+        LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
+        PointsEvent pe = new PointsEvent(1000l, ldt, 6);
+        ObjectMapper mapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+        System.out.println(mapper.writeValueAsString(pe));
+        when(pointsEventService.getPointsEventById(any())).thenReturn(pe);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/pointsEvent/1000")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(pe))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.numOfTimes").value("6"))
+        ;
+    }
+
+    //update
+    //delete
+
+    //post
     @Test
     public void addNewPointsEvent_shouldCreateAndReturnEvent() throws Exception {
         LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
-        PointsEvent pe = new PointsEvent(567l,ldt ,6);
-        given(pointsEventService.savePointsEvent(pe)).willReturn(pe);
+        PointsEvent pe = new PointsEvent();
+        pe.setEventDate(ldt);
+        pe.setNumOfTimes(6);
+        ObjectMapper mapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/pointsEvent"))
+//        System.out.println(mapper.writeValueAsString(pe));
+        when(pointsEventService.savePointsEvent(any(PointsEvent.class))).thenReturn(pe);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/pointsEvent")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(pe))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.numOfTimes").value("6"))
         ;
     }
 
+    //get all
     @Test
     public void getAllEvents_shouldReturnAllEvent() throws Exception {
         List<PointsEvent> events = new ArrayList<>();
@@ -60,6 +95,5 @@ public class PointsEventControllerTest {
                 .andExpect(jsonPath("$[2].numOfTimes").value("3"))
         ;
     }
-
 
 }

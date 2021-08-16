@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
@@ -37,7 +38,7 @@ public class PointsEventIT {
         ResponseEntity<PointsEvent> response = restTemplate.getForEntity("/api/v1/pointsEvent/1000",PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getId()).isEqualTo(1000L);
-        assertThat(response.getBody().getNumOfTimes()).isEqualTo(2);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
     }
 
     @Test
@@ -61,11 +62,12 @@ public class PointsEventIT {
         pe.setEventDate(ldt);
         pe.setNumOfTimes(3);
         pe.setId(1000L);
+        HttpEntity<PointsEvent> request = new HttpEntity<>(pe);
 
-        ResponseEntity<PointsEvent> response = restTemplate.put("/api/v1/pointsEvent/1000",PointsEvent.class);
+        ResponseEntity<PointsEvent> response = restTemplate.exchange("/api/v1/pointsEvent/1000", HttpMethod.PUT, request, PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody().getId()).isEqualTo(1000L);
-        assertThat(response.getBody().getNumOfTimes()).isEqualTo(2);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
     }
 
 
