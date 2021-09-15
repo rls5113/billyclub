@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class PointsEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pointsevent_id_seq")
-    @SequenceGenerator(name="pointsevent_id_seq", sequenceName = "pointsevent_seq", allocationSize = 1)
+    @SequenceGenerator(name="pointsevent_id_seq", sequenceName = "pointsevent_seq", allocationSize = 1, initialValue = 1000)
     @Column(name="id",updatable = false, nullable = false)
     private long id;
     private LocalDateTime eventDate;

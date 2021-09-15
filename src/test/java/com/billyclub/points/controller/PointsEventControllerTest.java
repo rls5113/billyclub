@@ -55,7 +55,34 @@ public class PointsEventControllerTest {
     }
 
     //update
+    @Test
+    public void updatePointsEvent_shouldChangeEventValues() throws Exception {
+        LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
+        PointsEvent pe = new PointsEvent(1000l,ldt,2);
+
+        LocalDateTime ldt1 = LocalDateTime.of(2021, Month.APRIL,8,0,0);
+        PointsEvent pe1 = new PointsEvent(1000l,ldt1,6);
+        ObjectMapper mapper = JsonMapper.builder().addModule(new JavaTimeModule()).build();
+
+        when(pointsEventService.getPointsEventById(any())).thenReturn(pe);
+        when(pointsEventService.savePointsEvent(any(PointsEvent.class))).thenReturn(pe1);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/pointsEvent/1000")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(pe1))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.numOfTimes").value("6"))
+        ;
+    }
     //delete
+    @Test
+    public void deletePointsEvent_shouldRemoveEventRecord() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/pointsEvent/1000"))
+                .andExpect(status().isOk())
+        ;
+    }
 
     //post
     @Test

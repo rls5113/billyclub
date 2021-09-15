@@ -25,7 +25,6 @@ public class PointsEventService {
     }
 
     public PointsEvent savePointsEvent(PointsEvent newPointsEvent) {
-        System.out.println(newPointsEvent.toString());
         return pointsEventRepo.save(newPointsEvent);
     }
 
@@ -35,6 +34,9 @@ public class PointsEventService {
 
         return  event;
     }
-
+    //delete
+    public void delete(Long id) {
+        pointsEventRepo.deleteById(id);
+    }
 
 }

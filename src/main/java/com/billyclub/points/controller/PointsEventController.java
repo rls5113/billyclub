@@ -45,7 +45,11 @@ public class PointsEventController {
         final PointsEvent updatedEvent = pointsEventService.savePointsEvent(event);
 
         return ResponseEntity.ok(updatedEvent);
+    }
 
+    @DeleteMapping("/pointsEvent/{id}")
+    private void deletePointsEventById(@PathVariable Long id) throws ResourceNotFoundException {
+        pointsEventService.delete(id);
     }
 
     @ExceptionHandler

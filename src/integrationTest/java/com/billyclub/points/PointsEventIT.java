@@ -35,39 +35,39 @@ public class PointsEventIT {
 
     @Test
     public void getPointsEventById_returnsCorrectRecord() throws Exception {
-        ResponseEntity<PointsEvent> response = restTemplate.getForEntity("/api/v1/pointsEvent/1000",PointsEvent.class);
+        ResponseEntity<PointsEvent> response = restTemplate.getForEntity("/api/v1/pointsEvent/2",PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getId()).isEqualTo(1000L);
+        assertThat(response.getBody().getId()).isEqualTo(2L);
         assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
     }
 
     @Test
     public void savePointsEvent_returnsNewRecord() throws Exception {
-        LocalDateTime ldt = LocalDateTime.of(2021, Month.APRIL,2,0,0);
+        LocalDateTime ldt = LocalDateTime.now().withHour(6).withMinute(0).withSecond(0).withNano(0);
         PointsEvent pe = new PointsEvent();
         pe.setEventDate(ldt);
-        pe.setNumOfTimes(2);
+        pe.setNumOfTimes(7);
 
         HttpEntity<PointsEvent> request = new HttpEntity<>(pe);
         ResponseEntity<PointsEvent> response = restTemplate.postForEntity("/api/v1/pointsEvent", request, PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody().getId()).isNotNull();
-        assertThat(response.getBody().getNumOfTimes()).isEqualTo(2);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(7);
 
     }
     @Test
     public void updatePointsEvent_updatesCorrectRecord() throws Exception {
-        LocalDateTime ldt = LocalDateTime.of(2021, Month.MARCH,2,0,0);
+        LocalDateTime ldt = LocalDateTime.now().plusDays(7).withHour(6).withMinute(0).withSecond(0).withNano(0);
         PointsEvent pe = new PointsEvent();
         pe.setEventDate(ldt);
-        pe.setNumOfTimes(3);
-        pe.setId(1000L);
+        pe.setNumOfTimes(2);
+        pe.setId(1L);
         HttpEntity<PointsEvent> request = new HttpEntity<>(pe);
 
-        ResponseEntity<PointsEvent> response = restTemplate.exchange("/api/v1/pointsEvent/1000", HttpMethod.PUT, request, PointsEvent.class);
+        ResponseEntity<PointsEvent> response = restTemplate.exchange("/api/v1/pointsEvent/1", HttpMethod.PUT, request, PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getId()).isEqualTo(1000L);
-        assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
+        assertThat(response.getBody().getId()).isEqualTo(1L);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(2);
     }
 
 

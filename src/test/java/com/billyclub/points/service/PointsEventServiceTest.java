@@ -32,17 +32,8 @@ public class PointsEventServiceTest {
 //        pointsEventService = new PointsEventService(pointsEventRepository);
 //    }
 
-//    @Test
-//    public void getEventDetails_returnsEventInfo() throws Exception {
-//        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
-//        given(pointsEventRepository.findByEventDate(any())).willReturn(pe);
-//        PointsEvent result = pointsEventService.getEventDetails("04/02/1962");
-//
-//        assertThat(result.getId()).isEqualTo(Long.valueOf("1"));
-//
-//    }
 
-    @Test
+    @Test   //findall
     public void getEventDetails_returnsEventInfo() throws Exception {
         PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
         List<PointsEvent> list = new ArrayList<>();
@@ -53,5 +44,38 @@ public class PointsEventServiceTest {
         assertThat(result.size()).isEqualTo(Integer.valueOf("1"));
 
     }
+
+    @Test  //findbyid
+    public void getEventById_returnsCorrectEvent() throws Exception {
+        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
+        given(pointsEventRepository.findById(1l)).willReturn(java.util.Optional.of(pe));
+        PointsEvent result = pointsEventService.getPointsEventById(1l);
+
+        assertThat(result.getNumOfTimes()).isEqualTo(Integer.valueOf("3"));
+    }
+
+    @Test  //put
+    public void putSaves_returnsEventChanges() throws Exception {
+        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
+        given(pointsEventRepository.findById(1l)).willReturn(java.util.Optional.of(pe));
+        PointsEvent result = pointsEventService.getPointsEventById(1l);
+        result.setNumOfTimes(6);
+        given(pointsEventRepository.save(any(PointsEvent.class))).willReturn(result);
+        PointsEvent changed = pointsEventService.savePointsEvent(result);
+
+        assertThat(changed.getNumOfTimes()).isEqualTo(Integer.valueOf("6"));
+    }
+
+//    @Test  //delete
+//    public void delete_removesRecord() throws Exception {
+//        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
+//        given(pointsEventRepository.deleteById(1l)).willReturn();
+//        PointsEvent result = pointsEventService.getPointsEventById(1l);
+//        result.setNumOfTimes(6);
+//        given(pointsEventRepository.save(any(PointsEvent.class))).willReturn(result);
+//        PointsEvent changed = pointsEventService.savePointsEvent(result);
+//
+//        assertThat(changed.getNumOfTimes()).isEqualTo(Integer.valueOf("6"));
+//    }
 
 }
