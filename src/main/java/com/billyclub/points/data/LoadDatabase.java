@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import java.time.LocalDateTime;
 
 @Configuration
-@Profile("dev")
+//@Profile("dev")
 class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);

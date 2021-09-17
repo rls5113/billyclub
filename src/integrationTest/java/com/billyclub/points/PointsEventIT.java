@@ -31,14 +31,15 @@ public class PointsEventIT {
     public void getPointsEvents_returnsAllPointEvents() throws Exception {
         ResponseEntity<PointsEvent[]> response = restTemplate.getForEntity("/api/v1/pointsEvent", PointsEvent[].class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().length).isEqualTo(4);
     }
 
     @Test
     public void getPointsEventById_returnsCorrectRecord() throws Exception {
-        ResponseEntity<PointsEvent> response = restTemplate.getForEntity("/api/v1/pointsEvent/2",PointsEvent.class);
+        ResponseEntity<PointsEvent> response = restTemplate.getForEntity("/api/v1/pointsEvent/1002",PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getId()).isEqualTo(2L);
-        assertThat(response.getBody().getNumOfTimes()).isEqualTo(3);
+        assertThat(response.getBody().getId()).isEqualTo(1002L);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(4);
     }
 
     @Test
@@ -60,14 +61,14 @@ public class PointsEventIT {
         LocalDateTime ldt = LocalDateTime.now().plusDays(7).withHour(6).withMinute(0).withSecond(0).withNano(0);
         PointsEvent pe = new PointsEvent();
         pe.setEventDate(ldt);
-        pe.setNumOfTimes(2);
-        pe.setId(1L);
+        pe.setNumOfTimes(5);
+        pe.setId(1000L);
         HttpEntity<PointsEvent> request = new HttpEntity<>(pe);
 
-        ResponseEntity<PointsEvent> response = restTemplate.exchange("/api/v1/pointsEvent/1", HttpMethod.PUT, request, PointsEvent.class);
+        ResponseEntity<PointsEvent> response = restTemplate.exchange("/api/v1/pointsEvent/1000", HttpMethod.PUT, request, PointsEvent.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getId()).isEqualTo(1L);
-        assertThat(response.getBody().getNumOfTimes()).isEqualTo(2);
+        assertThat(response.getBody().getId()).isEqualTo(1000L);
+        assertThat(response.getBody().getNumOfTimes()).isEqualTo(5);
     }
 
 
