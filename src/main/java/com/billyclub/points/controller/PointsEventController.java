@@ -48,8 +48,9 @@ public class PointsEventController {
     }
 
     @DeleteMapping("/pointsEvent/{id}")
-    private void deletePointsEventById(@PathVariable Long id) throws ResourceNotFoundException {
+    private ResponseEntity<?> deletePointsEventById(@PathVariable Long id) throws ResourceNotFoundException {
         pointsEventService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @ExceptionHandler
