@@ -11,6 +11,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 export class AppComponent {
   public pointsEvents: PointsEvent[] | undefined;
 
+
   constructor(private pointsEventService: PointsEventService) {  }
 
   ngOnInit() {

@@ -3,15 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import {PointsEventService} from "./points-event.service";
-import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
-    HttpClientModule
+    BrowserModule
   ],
   providers: [PointsEventService],
   bootstrap: [AppComponent]
