@@ -3,10 +3,14 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import {PointsEventService} from "./points-event.service";
+import { PointsEventComponent } from './points-event/points-event.component';
+import { PlayerComponent } from './player/player.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PointsEventComponent,
+    PlayerComponent
   ],
   imports: [
     BrowserModule
