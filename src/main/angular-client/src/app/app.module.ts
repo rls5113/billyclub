@@ -5,16 +5,20 @@ import { AppComponent } from './app.component';
 import { PointsEventComponent } from './points-event/points-event.component';
 import { PlayerComponent } from './player/player.component';
 import { HeaderComponent } from './header/header.component';
+import { PointsEventListComponent } from './points-event/points-event-list/points-event-list.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
     PointsEventComponent,
     PlayerComponent,
-    HeaderComponent
+    HeaderComponent,
+    PointsEventListComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
