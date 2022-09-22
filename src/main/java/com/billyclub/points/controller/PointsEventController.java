@@ -21,21 +21,21 @@ public class PointsEventController {
         this.pointsEventService = pointsEventService;
     }
 
-    @GetMapping("/pointsEvent/{id}")
+    @GetMapping("/pointsEvents/{id}")
     private ResponseEntity<PointsEvent> getPointsEventById(@PathVariable Long id) throws ResourceNotFoundException {
         return new ResponseEntity<PointsEvent>(pointsEventService.getPointsEventById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/pointsEvent")
+    @GetMapping("/pointsEvents")
     private ResponseEntity<List<PointsEvent>> getAllPointsEvents() {
         return new ResponseEntity<>(pointsEventService.getAllPointsEvents(), HttpStatus.OK);
     }
 
-    @PostMapping("/pointsEvent")
+    @PostMapping("/pointsEvents")
     private ResponseEntity<PointsEvent> savePointsEvent(@RequestBody PointsEvent newPointsEvent) {
         return new ResponseEntity<>(pointsEventService.savePointsEvent(newPointsEvent), HttpStatus.CREATED);
     }
-    @PutMapping("/pointsEvent/{id}")
+    @PutMapping("/pointsEvents/{id}")
     private ResponseEntity<PointsEvent> updatePointsEvent(@PathVariable Long id,@RequestBody PointsEvent body) throws ResourceNotFoundException {
         PointsEvent event = pointsEventService.getPointsEventById(id);
         if(event == null) throw new ResourceNotFoundException("PointsEvent[ id:"+id+" ]");
@@ -47,7 +47,7 @@ public class PointsEventController {
         return ResponseEntity.ok(updatedEvent);
     }
 
-    @DeleteMapping("/pointsEvent/{id}")
+    @DeleteMapping("/pointsEvents/{id}")
     private ResponseEntity<?> deletePointsEventById(@PathVariable Long id) throws ResourceNotFoundException {
         pointsEventService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

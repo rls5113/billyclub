@@ -23,8 +23,9 @@ public class PointsEvent {
     private LocalDate eventDate;
     private LocalTime startTime;
     private int numOfTimes;
-    public PointsEvent(LocalDate ldt, int numOfTimes) {
-        this.eventDate = ldt;
+    public PointsEvent(LocalDate date, LocalTime time, int numOfTimes) {
+        this.eventDate = date;
+        this.startTime = time;
         this.numOfTimes = numOfTimes;
     }
 //    @CreatedDate

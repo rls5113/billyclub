@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Configuration
 //@Profile("dev")
@@ -23,10 +24,10 @@ class LoadDatabase {
     CommandLineRunner initDatabase(PointsEventRepository repository) {
         System.out.println("loading data");
         return args -> {
-            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(7),2)));
-            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(8),3)));
-            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(14),4)));
-            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(15),3)));
+            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(7), LocalTime.of(6,30) ,2)));
+            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(8), LocalTime.of(6,30) ,3)));
+            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(14), LocalTime.of(6,30) ,4)));
+            log.info("Preloading " + repository.save(new PointsEvent(LocalDate.now().plusDays(15), LocalTime.of(6,30) ,3)));
         };
     }
 }
