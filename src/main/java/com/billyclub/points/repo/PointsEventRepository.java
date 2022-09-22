@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 
 
 public interface PointsEventRepository extends CrudRepository<PointsEvent, Long> {
-    public PointsEvent findByEventDate(LocalDateTime date);
+    // public PointsEvent findByEventDate(LocalDateTime date);
 }

@@ -2,6 +2,7 @@ package com.billyclub.points.service;
 
 import com.billyclub.points.exceptions.ResourceNotFoundException;
 import com.billyclub.points.model.PointsEvent;
+import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
 import com.billyclub.points.repo.PointsEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,18 +20,18 @@ public class PointsEventService {
         this.pointsEventRepo = pointsEventRepo;
     }
 
-    public List<PointsEvent> getAllPointsEvents() {
+    public List<PointsEvent> getAll() {
 
         return (List<PointsEvent>) pointsEventRepo.findAll();
     }
 
-    public PointsEvent savePointsEvent(PointsEvent newPointsEvent) {
+    public PointsEvent save(PointsEvent newPointsEvent) {
         return pointsEventRepo.save(newPointsEvent);
     }
 
-    public PointsEvent getPointsEventById(Long id) {
+    public PointsEvent findById(Long id) {
         PointsEvent event = pointsEventRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PointsEvent not exists with id: "+id));
+                .orElseThrow(() -> new PointsEventNotFoundException(id));
 
         return  event;
     }

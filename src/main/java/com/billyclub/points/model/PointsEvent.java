@@ -3,6 +3,7 @@ package com.billyclub.points.model;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class PointsEvent {
+public class PointsEvent extends RepresentationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pointsevent_id_seq")
     @SequenceGenerator(name="pointsevent_id_seq", sequenceName = "pointsevent_seq", allocationSize = 1, initialValue = 1000)
