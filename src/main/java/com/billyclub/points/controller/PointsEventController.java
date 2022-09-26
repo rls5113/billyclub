@@ -1,27 +1,29 @@
 package com.billyclub.points.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import com.billyclub.points.exceptions.ResourceNotFoundException;
 import com.billyclub.points.model.PointsEvent;
 import com.billyclub.points.model.assembler.PointsEventModelAssembler;
 import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
+import com.billyclub.points.model.validators.ValidationError;
+import com.billyclub.points.model.validators.ValidationErrorBuilder;
 import com.billyclub.points.service.PointsEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@Validated
 @RequestMapping("api/v1")
 public class PointsEventController {
 
@@ -48,17 +50,12 @@ public class PointsEventController {
         return CollectionModel.of(events,
                 linkTo(methodOn(PointsEventController.class).getAll()).withSelfRel());
     }
-//    public ResponseEntity<List<PointsEvent>> getAll() {
-//        return new ResponseEntity<>(pointsEventService.getAll(), HttpStatus.OK);
-//    }
 
-    @PostMapping(value = "/pointsEvents",
-            consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE},
-            produces ={MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE} )
+    @PostMapping(value = "/pointsEvents")
     @ResponseStatus(HttpStatus.CREATED)
     public EntityModel<?> add(@Valid @RequestBody PointsEvent newEvent) {
         return assembler
-                .toModel(pointsEventService.save(newEvent));
+                .toModel(pointsEventService.add(newEvent));
     }
     @PutMapping("/pointsEvents/{id}")
     public EntityModel<?> update(@PathVariable Long id, @RequestBody PointsEvent body) throws PointsEventNotFoundException {
@@ -82,9 +79,14 @@ public class PointsEventController {
     private void eventNotFoundHandler(PointsEventNotFoundException ex) {
 
     }
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    private void eventNotFoundHandler(PointsEventNotFoundException ex) {
-//
-//    }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ValidationError badRequestHandler(MethodArgumentNotValidException ex){
+        return createValidationError(ex);
+
+    }
+    private ValidationError createValidationError(MethodArgumentNotValidException ex) {
+        return ValidationErrorBuilder.fromBindingError(ex.getBindingResult());
+
+    }
 }

@@ -2,11 +2,14 @@ package com.billyclub.points.service;
 
 import com.billyclub.points.exceptions.ResourceNotFoundException;
 import com.billyclub.points.model.PointsEvent;
+import com.billyclub.points.model.exceptions.PointsEventClassValidationException;
 import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
 import com.billyclub.points.repo.PointsEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,10 @@ public class PointsEventService {
     }
 
     public PointsEvent save(PointsEvent newPointsEvent) {
+        return pointsEventRepo.save(newPointsEvent);
+    }
+
+    public PointsEvent add(PointsEvent newPointsEvent) {
         return pointsEventRepo.save(newPointsEvent);
     }
 
