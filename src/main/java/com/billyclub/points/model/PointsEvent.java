@@ -21,13 +21,13 @@ public class PointsEvent extends RepresentationModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pointsevent_id_seq")
     @SequenceGenerator(name="pointsevent_id_seq", sequenceName = "pointsevent_seq", allocationSize = 1, initialValue = 1000)
     @Column(name="id",updatable = false, nullable = false)
-    private long id;
+    public Long id;
     @NotNull(message = "Event date cannot be null")
     private LocalDate eventDate;
-    @NotNull(message = "Starting time cannot be null")
+//    @NotNull(message = "Starting time cannot be null")
     private LocalTime startTime;
-    @NotNull(message = "number of tee times cannot be null")
-    private int numOfTimes;
+//    @NotNull(message = "number of tee times cannot be null")
+    private Integer numOfTimes;
     public PointsEvent(LocalDate date, LocalTime time, int numOfTimes) {
         this.eventDate = date;
         this.startTime = time;

@@ -1,21 +1,41 @@
 package com.billyclub.points;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.mapping.RepositoryDetectionStrategy;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 
 @SpringBootApplication
+//@ComponentScan
 public class PointsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PointsApplication.class, args);
 	}
 
+//	@Bean
+//	public RepositoryRestConfigurer repositoryRestConfigurer() {
+//		return new RepositoryRestConfiguration() {
+//			@Override
+//			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration configuration, CorsRegistry corsRegistry){
+//				configuration.setRepositoryDetectionStrategy(RepositoryDetectionStrategy.RepositoryDetectionStrategies.ALL);
+//			}
+//		}
+//
+//	}
 	@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();

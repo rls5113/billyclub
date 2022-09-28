@@ -17,4 +17,6 @@ public class PointsEventModelAssembler implements RepresentationModelAssembler<P
                 linkTo(methodOn(PointsEventController.class).getAll()).withRel("events")
         );
     }
+
+
 }

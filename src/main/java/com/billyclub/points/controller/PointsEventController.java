@@ -4,9 +4,8 @@ import com.billyclub.points.exceptions.ResourceNotFoundException;
 import com.billyclub.points.model.PointsEvent;
 import com.billyclub.points.model.assembler.PointsEventModelAssembler;
 import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
-import com.billyclub.points.model.validators.ValidationError;
-import com.billyclub.points.model.validators.ValidationErrorBuilder;
 import com.billyclub.points.service.PointsEventService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -53,9 +52,9 @@ public class PointsEventController {
 
     @PostMapping(value = "/pointsEvents")
     @ResponseStatus(HttpStatus.CREATED)
-    public EntityModel<?> add(@Valid @RequestBody PointsEvent newEvent) {
-        return assembler
-                .toModel(pointsEventService.add(newEvent));
+    public EntityModel<?> add(@RequestBody @Valid PointsEvent newEvent) {
+        PointsEvent p = pointsEventService.add(newEvent);
+        return assembler.toModel(p);
     }
     @PutMapping("/pointsEvents/{id}")
     public EntityModel<?> update(@PathVariable Long id, @RequestBody PointsEvent body) throws PointsEventNotFoundException {
@@ -79,14 +78,14 @@ public class PointsEventController {
     private void eventNotFoundHandler(PointsEventNotFoundException ex) {
 
     }
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationError badRequestHandler(MethodArgumentNotValidException ex){
-        return createValidationError(ex);
-
-    }
-    private ValidationError createValidationError(MethodArgumentNotValidException ex) {
-        return ValidationErrorBuilder.fromBindingError(ex.getBindingResult());
-
-    }
+//    @ExceptionHandler
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    public ValidationError badRequestHandler(MethodArgumentNotValidException ex){
+//        return createValidationError(ex);
+//
+//    }
+//    private ValidationError createValidationError(MethodArgumentNotValidException ex) {
+//        return ValidationErrorBuilder.fromBindingError(ex.getBindingResult());
+//
+//    }
 }
