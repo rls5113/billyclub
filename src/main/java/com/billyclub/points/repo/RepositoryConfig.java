@@ -1,22 +1,23 @@
 package com.billyclub.points.repo;
 
 import com.billyclub.points.model.PointsEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.rest.core.config.EnumTranslationConfiguration;
-import org.springframework.data.rest.core.config.MetadataConfiguration;
-import org.springframework.data.rest.core.config.ProjectionDefinitionConfiguration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
+import javax.annotation.PostConstruct;
+
 @Configuration
+public class RepositoryConfig {
 
-public class RepositoryConfig {//extends RepositoryRestConfiguration {
+    @Autowired
+    RepositoryRestConfiguration repositoryRestConfiguration;
 
-//    public RepositoryConfig(ProjectionDefinitionConfiguration projectionConfiguration, MetadataConfiguration metadataConfiguration, EnumTranslationConfiguration enumTranslationConfiguration) {
-//        super(projectionConfiguration, metadataConfiguration, enumTranslationConfiguration);
-//    }
-//
-//    @Override
-    protected void  configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        config.exposeIdsFor(PointsEvent.class);
+    @PostConstruct
+    public void init() {
+        repositoryRestConfiguration.exposeIdsFor(PointsEvent.class);
+        repositoryRestConfiguration.setReturnBodyForPutAndPost(true);
+        repositoryRestConfiguration.setReturnBodyOnCreate(true);
+        repositoryRestConfiguration.setReturnBodyOnUpdate(true);
     }
 }

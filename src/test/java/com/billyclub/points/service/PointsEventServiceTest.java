@@ -10,7 +10,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +38,14 @@ public class PointsEventServiceTest {
 
     @Test   //findall
     public void getEventDetails_returnsEventInfo() throws Exception {
-        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
+        LocalDate ld = LocalDate.of(2022, Month.APRIL,2);
+        LocalTime lt = LocalTime.of(6,30,0);
+
+        PointsEvent pe = new PointsEvent(ld,lt,3);
         List<PointsEvent> list = new ArrayList<>();
         list.add(pe);
         given(pointsEventRepository.findAll()).willReturn(list);
-        List<PointsEvent> result = pointsEventService.getAllPointsEvents();
+        List<PointsEvent> result = pointsEventService.getAll();
 
         assertThat(result.size()).isEqualTo(Integer.valueOf("1"));
 
@@ -47,21 +53,29 @@ public class PointsEventServiceTest {
 
     @Test  //findbyid
     public void getEventById_returnsCorrectEvent() throws Exception {
-        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
-        given(pointsEventRepository.findById(1l)).willReturn(java.util.Optional.of(pe));
-        PointsEvent result = pointsEventService.getPointsEventById(1l);
+        LocalDate ld = LocalDate.of(2022, Month.APRIL,2);
+        LocalTime lt = LocalTime.of(6,30,0);
+        PointsEvent pe = new PointsEvent(ld,lt,3);
+        given(pointsEventRepository.findById(1000l)).willReturn(java.util.Optional.of(pe));
+        PointsEvent result = pointsEventService.findById(1000l);
 
+        assertThat(result.getEventDate()).isEqualTo(ld);
+        assertThat(result.getStartTime()).isEqualTo(lt);
         assertThat(result.getNumOfTimes()).isEqualTo(Integer.valueOf("3"));
     }
 
     @Test  //put
     public void putSaves_returnsEventChanges() throws Exception {
-        PointsEvent pe = new PointsEvent(1, LocalDateTime.of(1962,3,2,0,0),3);
-        given(pointsEventRepository.findById(1l)).willReturn(java.util.Optional.of(pe));
-        PointsEvent result = pointsEventService.getPointsEventById(1l);
+
+        LocalDate ld = LocalDate.of(2022, Month.APRIL,2);
+        LocalTime lt = LocalTime.of(6,30,0);
+        PointsEvent pe = new PointsEvent(1000l,ld,lt,3);
+
+        given(pointsEventRepository.findById(1000l)).willReturn(java.util.Optional.of(pe));
+        PointsEvent result = pointsEventService.findById(1000l);
         result.setNumOfTimes(6);
         given(pointsEventRepository.save(any(PointsEvent.class))).willReturn(result);
-        PointsEvent changed = pointsEventService.savePointsEvent(result);
+        PointsEvent changed = pointsEventService.save(result);
 
         assertThat(changed.getNumOfTimes()).isEqualTo(Integer.valueOf("6"));
     }

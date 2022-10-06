@@ -3,6 +3,7 @@ package com.billyclub.points;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,16 +27,6 @@ public class PointsApplication {
 		SpringApplication.run(PointsApplication.class, args);
 	}
 
-//	@Bean
-//	public RepositoryRestConfigurer repositoryRestConfigurer() {
-//		return new RepositoryRestConfiguration() {
-//			@Override
-//			public void configureRepositoryRestConfiguration(RepositoryRestConfiguration configuration, CorsRegistry corsRegistry){
-//				configuration.setRepositoryDetectionStrategy(RepositoryDetectionStrategy.RepositoryDetectionStrategies.ALL);
-//			}
-//		}
-//
-//	}
 	@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();

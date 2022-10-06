@@ -1,8 +1,12 @@
 package com.billyclub.points.model.exceptions;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class PointsEventNotFoundException extends RuntimeException {
-    public PointsEventNotFoundException(Long id) {
-        super("Could not find points event: "+id);
+    public PointsEventNotFoundException(String message) {
+        super(message);
     }
 
 }

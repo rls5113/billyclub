@@ -38,7 +38,7 @@ public class PointsEventService {
 
     public PointsEvent findById(Long id) {
         PointsEvent event = pointsEventRepo.findById(id)
-                .orElseThrow(() -> new PointsEventNotFoundException(id));
+                .orElseThrow(() -> new PointsEventNotFoundException("Cannot find PointsEvent for id = "+id));
 
         return  event;
     }
