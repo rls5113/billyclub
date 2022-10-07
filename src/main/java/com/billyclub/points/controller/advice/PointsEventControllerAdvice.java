@@ -35,25 +35,13 @@ public class PointsEventControllerAdvice extends ResponseEntityExceptionHandler 
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-
-
-
-//        return null;
-//                StringBuilder builder = new StringBuilder();
-
-//        Map<String,String> errors = new HashMap<>();
         List<String> errors = new ArrayList<>();
         ex.getBindingResult().getAllErrors().forEach((error) ->{
-//            String fieldname = ((FieldError) error).getField();
             String errMsg = error.getDefaultMessage();
-//            builder.append(fieldname+" : "+errMsg);
-//            errors.put(fieldname, errMsg);
             errors.add(errMsg);
         });
 
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(),errors, "Points Event Validation failed." );
-//        return errors;
-//        return null;
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 //    @ResponseBody
@@ -66,7 +54,4 @@ public class PointsEventControllerAdvice extends ResponseEntityExceptionHandler 
 //        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 //    }
 
-//    private ResponseEntity<?> buildResponseEntity(ApiError ) {
-//        return null;
-//    }
 }
