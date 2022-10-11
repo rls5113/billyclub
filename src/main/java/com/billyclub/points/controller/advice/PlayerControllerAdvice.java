@@ -1,27 +1,29 @@
 package com.billyclub.points.controller.advice;
 
 import com.billyclub.points.exceptions.ErrorDetails;
-import com.billyclub.points.model.exceptions.PointsEventClassValidationException;
+import com.billyclub.points.model.exceptions.PlayerNotFoundException;
 import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestControllerAdvice
-public class PointsEventControllerAdvice extends ResponseEntityExceptionHandler {
+public class PlayerControllerAdvice extends ResponseEntityExceptionHandler {
     @ResponseBody
-    @ExceptionHandler(PointsEventNotFoundException.class)
+    @ExceptionHandler(PlayerNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResponseEntity<?> pointsEventNotFoundExceptionHandler(PointsEventNotFoundException ex, WebRequest request) {
+    ResponseEntity<?> playerNotFoundExceptionHandler(PlayerNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }

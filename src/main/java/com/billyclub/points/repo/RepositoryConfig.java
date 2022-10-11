@@ -1,5 +1,6 @@
 package com.billyclub.points.repo;
 
+import com.billyclub.points.model.Player;
 import com.billyclub.points.model.PointsEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ public class RepositoryConfig {
 
     @PostConstruct
     public void init() {
-        repositoryRestConfiguration.exposeIdsFor(PointsEvent.class);
+        repositoryRestConfiguration.exposeIdsFor(PointsEvent.class, Player.class);
         repositoryRestConfiguration.setReturnBodyForPutAndPost(true);
         repositoryRestConfiguration.setReturnBodyOnCreate(true);
         repositoryRestConfiguration.setReturnBodyOnUpdate(true);
