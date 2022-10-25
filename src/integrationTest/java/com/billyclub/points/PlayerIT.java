@@ -36,7 +36,7 @@ public class PlayerIT {
 
         CollectionModel<EntityModel<Player>> list = response.getBody();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getContent().size()).isEqualTo(4);
+        assertThat(response.getBody().getContent().size()).isEqualTo(3);
     }
 
 

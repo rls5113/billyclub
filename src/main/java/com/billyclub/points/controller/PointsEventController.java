@@ -1,6 +1,8 @@
 package com.billyclub.points.controller;
 
+import com.billyclub.points.model.Player;
 import com.billyclub.points.model.PointsEvent;
+import com.billyclub.points.model.assembler.PlayerModelAssembler;
 import com.billyclub.points.model.assembler.PointsEventModelAssembler;
 import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
 import com.billyclub.points.service.PointsEventService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -30,18 +33,40 @@ public class PointsEventController {
     @Autowired
     private final PointsEventService pointsEventService;
     @Autowired
-    private final PointsEventModelAssembler assembler;
-    public PointsEventController(PointsEventService service, PointsEventModelAssembler assembler) {
+    private final PointsEventModelAssembler eventAssembler;
+    @Autowired
+    private final PlayerModelAssembler playerAssembler;
+
+    public PointsEventController(PointsEventService service,
+                                 PointsEventModelAssembler eventAssembler,
+                                 PlayerModelAssembler playerAssembler) {
         this.pointsEventService = service;
-        this.assembler = assembler;
+        this.eventAssembler = eventAssembler;
+        this.playerAssembler = playerAssembler;
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+//    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<EntityModel<PointsEvent>> getById(@PathVariable Long id) throws PointsEventNotFoundException {
+//    public ResponseEntity<PointsEvent> getById(@PathVariable Long id) throws PointsEventNotFoundException {
         final PointsEvent p = pointsEventService.findById(id);
-        EntityModel<PointsEvent> model = assembler.toModel(p);
+        EntityModel<PointsEvent> model = eventAssembler.toModel(p);
         return new ResponseEntity<>(model,HttpStatus.OK);
+//        return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/players")
+//    @ResponseStatus(HttpStatus.OK)
+    public CollectionModel<EntityModel<Player>> getPlayers(@PathVariable Long eventId) throws PointsEventNotFoundException {
+        final PointsEvent p = pointsEventService.findById(eventId);
+        Set<EntityModel<Player>> players = p.getPlayers()
+                .stream()
+                .map(playerAssembler::toModel)
+                .collect(Collectors.toSet());
+
+        CollectionModel<EntityModel<Player>> collectionModel = CollectionModel.of(players);
+        //        collectionModel.add(linkTo(methodOn(PointsEventController.class).getPlayers())).withSelfRel());
+        return collectionModel;
     }
 
     @GetMapping
@@ -49,7 +74,7 @@ public class PointsEventController {
         LOGGER.debug("enter controller.getAll()");
         List<EntityModel<PointsEvent>> listEntityModel = pointsEventService.getAll()
                 .stream()
-                .map(assembler::toModel)
+                .map(eventAssembler::toModel)
                 .collect(Collectors.toList());
 
         CollectionModel<EntityModel<PointsEvent>> collectionModel = CollectionModel.of(listEntityModel);
@@ -60,7 +85,7 @@ public class PointsEventController {
     @PostMapping
     public ResponseEntity<EntityModel<PointsEvent>> add(@RequestBody @Valid PointsEvent newEvent) {
         final PointsEvent p = pointsEventService.add(newEvent);
-        EntityModel model = assembler.toModel(p);
+        EntityModel model = eventAssembler.toModel(p);
         return ResponseEntity.created(linkTo(methodOn(PointsEventController.class).add(p)).toUri()).body(model);
     }
     @PutMapping("/{id}")
@@ -69,8 +94,9 @@ public class PointsEventController {
         event.setEventDate(body.getEventDate());
         event.setStartTime(body.getStartTime());
         event.setNumOfTimes(body.getNumOfTimes());
+        event.setPlayers(body.getPlayers());
         final PointsEvent updated = pointsEventService.save(event);
-        EntityModel model = assembler.toModel(updated);
+        EntityModel model = eventAssembler.toModel(updated);
 
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
@@ -79,7 +105,7 @@ public class PointsEventController {
     public ResponseEntity<EntityModel<PointsEvent>> delete(@PathVariable Long id) throws PointsEventNotFoundException {
         PointsEvent toDelete = pointsEventService.findById(id);
         pointsEventService.delete(id);
-        EntityModel<PointsEvent> model = assembler.toModel(toDelete);
+        EntityModel<PointsEvent> model = eventAssembler.toModel(toDelete);
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 

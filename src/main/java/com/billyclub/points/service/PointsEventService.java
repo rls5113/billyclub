@@ -1,6 +1,7 @@
 package com.billyclub.points.service;
 
 import com.billyclub.points.exceptions.ResourceNotFoundException;
+import com.billyclub.points.model.Player;
 import com.billyclub.points.model.PointsEvent;
 import com.billyclub.points.model.exceptions.PointsEventClassValidationException;
 import com.billyclub.points.model.exceptions.PointsEventNotFoundException;
@@ -15,12 +16,12 @@ import java.util.Optional;
 
 @Service
 public class PointsEventService {
+    private final PointsEventRepository pointsEventRepo;
+    private final PlayerService playerService;
     @Autowired
-    PointsEventRepository pointsEventRepo;
-
-    public PointsEventService(PointsEventRepository pointsEventRepo) {
-
+    public PointsEventService(PointsEventRepository pointsEventRepo, PlayerService playerService) {
         this.pointsEventRepo = pointsEventRepo;
+        this.playerService = playerService;
     }
 
     public List<PointsEvent> getAll() {
@@ -45,6 +46,13 @@ public class PointsEventService {
     //delete
     public void delete(Long id) {
         pointsEventRepo.deleteById(id);
+    }
+
+    public PointsEvent addPlayerToEvent(Long eventId, Long playerId) {
+        PointsEvent event = findById(eventId);
+        Player player = playerService.findById(playerId);
+        event.getPlayers().add(player);
+        return event;
     }
 
 }

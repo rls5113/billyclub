@@ -2,7 +2,7 @@ package com.billyclub.points.model.assembler;
 
 import com.billyclub.points.controller.PointsEventController;
 import com.billyclub.points.model.PointsEvent;
-import org.springframework.context.annotation.Bean;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,9 @@ public class PointsEventModelAssembler implements RepresentationModelAssembler<P
         return eventModel;
     }
 
-//    public PointsEvent toObject()
+    public CollectionModel<EntityModel<PointsEvent>> toCollectionModel(Iterable<? extends PointsEvent> events) {
 
+        return RepresentationModelAssembler.super.toCollectionModel(events);
+    }
 
 }

@@ -1,21 +1,23 @@
 package com.billyclub.points.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "player_id_seq")
@@ -34,7 +36,9 @@ public class Player {
 
     //TODO:  add number of birdies made by player for this event
     //TODO:  add user object, and use to supply player name
-
+    @JsonIgnore
+    @ManyToMany(mappedBy = "players")
+    private Set<PointsEvent> events = new HashSet<>();
     public Player(String name, Integer pointsToPull, Integer pointsThisEvent, LocalDateTime timeEntered) {
         this.name = name;
         this.pointsToPull = pointsToPull;
@@ -42,7 +46,13 @@ public class Player {
         this.timeEntered = timeEntered;
     }
 
+    public Set<PointsEvent> getEvents() {
+        return events;
+    }
 
+    public void setEvents(Set<PointsEvent> events) {
+        this.events = events;
+    }
 //    @CreatedDate
 //    private LocalDateTime createdDate;
 //    @CreatedBy
